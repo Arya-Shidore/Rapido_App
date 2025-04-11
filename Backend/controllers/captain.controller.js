@@ -1,7 +1,3 @@
-import express from 'express';
-import isCaptain from '../middlewares/isCaptain.middleware.js';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
 import captainModel from '../models/captain.model.js';
 
 const registerCaptain = async (req, res) => {

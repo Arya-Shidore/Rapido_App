@@ -8,7 +8,6 @@ import {
 
 const router = express.Router();
 
-// Ride routes
 router.get("/get-coordinates", getCoordinates);
 router.get("/get-distanceTime", getDistanceTime);
 router.get("/get-suggessions", getSuggessions);

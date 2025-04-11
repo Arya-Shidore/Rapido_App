@@ -1,15 +1,9 @@
 import Ride from "../models/ride.model.js";
 import User from "../models/user.model.js";
-import Captain from "../models/captain.model.js";
-// ride.model.js
-import ride from "../models/ride.model.js";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { getDistanceTime } from "../utils/getDistanceTime.js";
 
 dotenv.config();
-
-// Book a ride
 
 export const bookRide = async (req, res) => {
     const { pickup,destination } = req.body;
@@ -46,5 +40,32 @@ export const bookRide = async (req, res) => {
     catch (error) {
         console.error(error);   
         return res.status(500).json({ message: "Error booking ride" });
+    }
+}
+
+
+export const acceptRide = async (req, res) => {
+    const { rideId, otp } = req.body;
+    console.log("rideId", rideId);
+    console.log("otp", otp);
+    try {
+        const ride = await Ride.findById(rideId).select("+otp");
+        if (!ride) {
+            return res.status(404).json({ message: "Ride not found" });
+        }
+        console.log("ride otp !", ride);
+        if (ride.otp !== otp) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+        
+        ride.status = "accepted";
+        ride.captain = req.captain._id;
+        await ride.save();
+
+        return res.status(200).json({ message: "Ride accepted successfully", ride });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Error accepting ride" });
     }
 }

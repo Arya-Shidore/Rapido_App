@@ -1,5 +1,3 @@
-// getCoordinate, getDistanceTime, getSuggessions
-
 const getCoordinates = async (req, res) => {
     console.log("getCoordinates", req.body);
     const { origin, destination } = req.body;

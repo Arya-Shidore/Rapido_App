@@ -1,8 +1,5 @@
 import express from "express";
 import userModel from "../models/user.model.js"
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import isUser from "../middlewares/isUser.middleware.js";
 
 const registerUser = async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
