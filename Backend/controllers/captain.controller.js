@@ -74,8 +74,14 @@ const loginPage = async (req, res) => {
     });
 }
 
+const logoutCaptain = async (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logged out successfully' });
+}
+
 export {
     registerCaptain,
     loginCaptain,
     loginPage,
+    logoutCaptain,
 }

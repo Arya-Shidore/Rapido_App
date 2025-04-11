@@ -78,4 +78,14 @@ const loginPage = async (req, res) => {
     });
 }
 
-export { registerUser, loginUser, loginPage };
+const logoutUser = async (req, res) => {
+    res.cookie('token', '', {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+    });
+    res.status(200).json({ message: "Logout successful" });
+}
+
+export { registerUser, loginUser, loginPage,logoutUser };
