@@ -35,7 +35,11 @@ const Start = () => {
 
       {/* Footer with Continue Button */}
       <footer className="w-full text-center pb-6">
-        <button className="w-80 h-10 mx-auto text-base py-1 px-2 border border-black rounded-md bg-gray-200 hover:bg-gray-300">
+        <button className="w-80 h-10 mx-auto text-base py-1 px-2 border border-black rounded-md bg-gray-200 hover:bg-gray-300"
+          onClick={() => {
+            window.location.href = '/login'; // Redirect to login page
+          }}
+        >
           Continue
         </button>
       </footer>

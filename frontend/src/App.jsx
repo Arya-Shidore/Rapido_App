@@ -1,7 +1,7 @@
 
 import React, { useContext } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Start from './pages/Home'
+import Start from './pages/Start'
 import CaptainLogin from './pages/CaptainLogin'
 import CaptainSignup from './pages/CaptainSignup'
 import UserLogin from './pages/UserLogin'
@@ -9,6 +9,7 @@ import UserSignup from './pages/UserSignup'
 import Home from './pages/Home'
 
 import { UserDataContext } from './context/userContext'
+import BookRide from './pages/BookRide'
 
 const App = () => {
   const ans=useContext(UserDataContext)
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/book-ride" element={<BookRide />} />
       </Routes>
     </div>
   )
