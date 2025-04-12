@@ -18,4 +18,23 @@ const getDistanceTime = async (origin, destination) => {
     }
 }
 
+// cost for uberGo = distacne+duration*0.5, motorBike = distance+duration*0.3, auto = distance+duration*0.4
+const getCost = (distance, duration, vehicleType) => {
+    let cost = 0;
+    switch (vehicleType) {
+        case 'uberGo':
+            cost = distance + duration * 0.5;
+            break;
+        case 'motorBike':
+            cost = distance + duration * 0.3;
+            break;
+        case 'auto':
+            cost = distance + duration * 0.4;
+            break;
+        default:
+            cost = distance + duration * 0.5; // default to uberGo
+    }
+    return cost;
+}
+
 export { getDistanceTime };
