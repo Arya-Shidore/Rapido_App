@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import LocationSearchPanel from '../components/LocationSearchPanel';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-// import './UberMapPage.css';
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
-  const [origin, setorigin] = useState("")
-  const [destination, setdestination] = useState("")
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [focusedInput, setFocusedInput] = useState("");
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     console.log("origin", origin);
     console.log("destination", destination);
     navigate("/book-ride");
-  }
+  };
 
   return (
     <div
@@ -39,26 +38,47 @@ const Home = () => {
       >
         <h2 className="text-gray-500 text-2xl font-bold mb-4 text-center">Book a Ride</h2>
         <form className="space-y-4" onSubmit={onSubmitHandler}>
-          <div>
+          <div className="relative">
             <label className="block mb-1 font-medium text-gray-500">Origin</label>
             <input
               type="text"
-              placeholder="Enter course"
+              placeholder="Enter origin"
               className="w-full p-2 border border-gray-300 rounded"
               value={origin}
-              onChange={(e) => setorigin(e.target.value)}
+              onChange={(e) => setOrigin(e.target.value)}
+              onFocus={() => setFocusedInput("origin")}
+              onBlur={() => setTimeout(() => setFocusedInput(""), 200)}
             />
+            {focusedInput === "origin" && (
+              <LocationSearchPanel
+                inputValue={origin}
+                onSelect={(value) => {
+                  setOrigin(value);
+                  setFocusedInput("");
+                }}
+              />
+            )}
           </div>
-          <div>
+          <div className="relative">
             <label className="block mb-1 font-medium text-gray-500">Destination</label>
             <input
               type="text"
               placeholder="Enter destination"
               className="w-full p-2 border border-gray-300 rounded"
               value={destination}
-              onChange={(e) => setdestination(e.target.value)}
+              onChange={(e) => setDestination(e.target.value)}
+              onFocus={() => setFocusedInput("destination")}
+              onBlur={() => setTimeout(() => setFocusedInput(""), 200)}
             />
-            <LocationSearchPanel />
+            {focusedInput === "destination" && (
+              <LocationSearchPanel
+                inputValue={destination}
+                onSelect={(value) => {
+                  setDestination(value);
+                  setFocusedInput("");
+                }}
+              />
+            )}
           </div>
           <button
             type="submit"
