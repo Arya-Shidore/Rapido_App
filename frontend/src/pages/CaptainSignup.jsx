@@ -2,24 +2,49 @@ import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 const CaptainSignup = () => {
   const [firstname, setfirstname] = useState("");
   const [lastname, setlastname] = useState("")
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const [userData, setuserData] = useState({})
-  const submitHandler = (e) => {
-    console.log("submit");
+  const [vehicleColor, setvehicleColor] = useState("");
+  const [vehiclePlate, setvehiclePlate] = useState("");
+  const [vehicleType, setvehicleType] = useState("")
+  const [vehicleCapacity, setvehicleCapacity] = useState("");
+
+const {user, setUser} = useContext(UserDataContext);
+const navigate = useNavigate();
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("userData", userData);
-    setuserData({
+    
+    const userData = {
       firstname: firstname,
       lastname: lastname,
       email: email,
-      password: password
-    })
-    setfirstName("");
-    setlastName("");
+      password: password,
+      vehicle:{
+        color: vehicleColor,
+        plate: vehiclePlate,
+        capacity: vehicleCapacity,
+        vehicleType: vehicleType,
+      }
+    }
+    const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`, userData)
+    const data=response.data;
+    if(response.status !== 200){
+      alert("Invalid credentials");
+      return;
+    }
+    setUser(data);
+    navigate("/home");
+
+
+    setfirstname("");
+    setlastname("");
     setemail("");
     setpassword("");
   }
@@ -92,6 +117,54 @@ const CaptainSignup = () => {
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
               value={password}
               onChange={(e) => setpassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Vehicle Color
+            </label>
+            <input
+              type="text"
+              placeholder="Red"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              value={vehicleColor}
+              onChange={(e) => setvehicleColor(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Vehicle Plate
+            </label>
+            <input
+              type="text"
+              placeholder="ABC123"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              value={vehiclePlate}
+              onChange={(e) => setvehiclePlate(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Vehicle Type
+            </label>
+            <input
+              type="text"
+              placeholder="Car"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              value={vehicleType}
+              onChange={(e) => setvehicleType(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Vehicle Capacity
+            </label>
+            <input
+              type="number"
+              placeholder="4"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+              value={vehicleCapacity}
+              onChange={(e) => setvehicleCapacity(e.target.value)}
             />
           </div>
 

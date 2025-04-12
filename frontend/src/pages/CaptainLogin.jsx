@@ -1,20 +1,32 @@
-import { set } from 'mongoose';
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 const CaptainLogin = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [userData, setuserData] = useState({})
-
-  const submitHandler = (e) => {
+  // get context  
+  const {user, setUser} = useContext(UserDataContext);
+  const navigate = useNavigate();
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setuserData({
+    const userData = {
       email: email,
-      password: password
-    })
-    console.log(userData);
+      password: password,
+    }
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, userData)
+    const data = response.data;
+    if(response.status !== 200){
+      alert("Invalid credentials");
+      return;
+    }
+    setUser(data);
+    navigate("/home");
     setemail("");
     setpassword("");
   }

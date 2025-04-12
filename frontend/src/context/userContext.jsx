@@ -24,7 +24,7 @@ export const UserContextProvider = ({ children }) => {
     }
 
     return (
-        <UserDataContext.Provider value={{ user, setUser, submitHandler }}>
+        <UserDataContext.Provider value={{ user, setUser }}>
             {children}
         </UserDataContext.Provider>
     )
