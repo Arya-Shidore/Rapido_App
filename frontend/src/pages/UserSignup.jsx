@@ -16,6 +16,7 @@ const navigate = useNavigate();
 
   const {user, setUser} = useContext(UserDataContext);
   const submitHandler = async (e) => {
+    console.log("submitHandler");
     e.preventDefault();
 
     const userData = {
@@ -25,19 +26,32 @@ const navigate = useNavigate();
       password: password
     }
     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, userData)
+    console.log("response !!", response);
     const data=response.data;
-    if(response.status !== 201 || response.status !== 200){
-      alert("Invalid credentials");
-      return;
-    }
-    setUser(data);
-    localStorage.setItem("token", data.token);
-    navigate("/home");
+    // if(response.status !== 201 || response.status !== 200){
+    //   alert("Invalid credentials");
+    //   return;
+    // }
+    // setUser(data);
+    // localStorage.setItem("token", data.token);
+    // navigate("/home");
     
-    setfirstname("");
-    setlastname("");
-    setemail("");
-    setpassword("");
+    // setfirstname("");
+    // setlastname("");
+    // setemail("");
+    // setpassword("");
+    if(response.status===201 || response.status===200){
+      alert("User Created Successfully");
+      
+      setUser(data);
+      localStorage.setItem("token", data.token);
+      navigate("/login");
+      
+      setfirstname("");
+      setlastname("");
+      setemail("");
+      setpassword("");
+    }
   }
 
   return (

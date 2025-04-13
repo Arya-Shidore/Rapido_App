@@ -21,16 +21,23 @@ const UserLogin = () => {
     e.preventDefault();
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, user)
     const data = response.data;
-    if(response.status !== 201 && response.status !== 200){
-      alert("Invalid credentials");
-      return;
-    }
+    // if(response.status !== 201 && response.status !== 200){
+    //   alert("Invalid credentials");
+    //   return;
+    // }
 
-    setUser(data);
-    localStorage.setItem("token", data.token);
-    navigate("/home");
-    setemail("");
-    setpassword("");
+    // setUser(data);
+    // localStorage.setItem("token", data.token);
+    // navigate("/home");
+    // setemail("");
+    // setpassword("");
+    if(response.status===201 || response.status===200){
+      setUser(data);
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+      setemail("");
+      setpassword("");
+    }
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
