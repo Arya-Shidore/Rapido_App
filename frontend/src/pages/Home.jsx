@@ -1,44 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
+import LocationSearchPanel from '../components/LocationSearchPanel';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [focusedInput, setFocusedInput] = useState("");
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    console.log("origin", origin);
+    console.log("destination", destination);
+    navigate("/book-ride", {
+      state: { origin, destination }
+    });
+    
+    
+  };
+
   return (
     <div
-      className="min-h-screen flex flex-col justify-between bg-gray-100 p-4 bg-cover bg-center"
-      style={{
-        // adjust ht and wt
-        backgroundImage:
-          "url('https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-c334-61f7-a8f5-6e35042db357/raw?se=2025-04-11T17%3A58%3A13Z&sp=r&sv=2024-08-04&sr=b&scid=b04ffc22-5db7-5c6d-9072-b2ab75d2828a&skoid=cbbaa726-4a2e-4147-932c-56e6e553f073&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-10T22%3A08%3A36Z&ske=2025-04-11T22%3A08%3A36Z&sks=b&skv=2024-08-04&sig=TsqXfYFLvyD%2BWpmWe2K4ixmVXaTRz09cHnlDG/arNDw%3D')",
-        }}
+      className="form-container bg-cover bg-center min-h-screen flex items-center justify-center relative overflow-hidden"
+      style={{ backgroundImage: "url('https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif')" }}
     >
-      {/* Header */}
-      <header className="text-center pt-10 bg-opacity-70 p-4 rounded">
-        <h1 className="text-4xl font-bold text-gray-900">Welcome to Uber</h1>
-        <p className="text-lg text-black mt-2">Your ride, on demand</p>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-grow flex flex-col justify-center items-center bg-opacity-70 p-6 rounded">
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
-          alt="Uber Logo"
-          className="w-48 h-auto mb-4"
-        />
-        <img
-          src="https://media.tenor.com/9vYtVjQz4ssAAAAC/car-driving.gif"
-          alt="Animated Car"
-          className="w-32 h-auto mb-6"
-        />
-        <p className="text-lg text-black text-center max-w-md">
-          Tap the button below to get started. We'll connect you with a nearby driver.
-        </p>
-      </main>
-
-      {/* Footer with Continue Button */}
-      <footer className="w-full text-center pb-6">
-        <button className="w-80 h-10 mx-auto text-base py-1 px-2 border border-black rounded-md bg-gray-200 hover:bg-gray-300">
-          Continue
+      <div className="absolute top-10 z-10">
+        <button
+          onClick={() => setShowForm(true)}
+          className="bg-black text-white px-6 py-2 rounded shadow-lg hover:bg-gray-800"
+        >
+          Book Ride
         </button>
-      </footer>
+      </div>
+
+      <div
+        className={`transition-all duration-700 transform ${
+          showForm ? 'translate-y-0 opacity-100' : 'translate-y-32 opacity-0 pointer-events-none'
+        } bg-gray-800 bg-opacity-80 p-8 rounded-xl shadow-lg w-full max-w-md absolute z-0`}
+        style={{ top: '30%' }}
+      >
+        <h2 className="text-gray-500 text-2xl font-bold mb-4 text-center">Book a Ride</h2>
+        <form className="space-y-4" onSubmit={onSubmitHandler}>
+          <div className="relative">
+            <label className="block mb-1 font-medium text-gray-500">Origin</label>
+            <input
+              type="text"
+              placeholder="Enter origin"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={origin}
+              onChange={(e) => setOrigin(e.target.value)}
+              onFocus={() => setFocusedInput("origin")}
+              onBlur={() => setTimeout(() => setFocusedInput(""), 200)}
+            />
+            {focusedInput === "origin" && (
+              <LocationSearchPanel
+                inputValue={origin}
+                onSelect={(value) => {
+                  setOrigin(value);
+                  setFocusedInput("");
+                }}
+              />
+            )}
+          </div>
+          <div className="relative">
+            <label className="block mb-1 font-medium text-gray-500">Destination</label>
+            <input
+              type="text"
+              placeholder="Enter destination"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
+              onFocus={() => setFocusedInput("destination")}
+              onBlur={() => setTimeout(() => setFocusedInput(""), 200)}
+            />
+            {focusedInput === "destination" && (
+              <LocationSearchPanel
+                inputValue={destination}
+                onSelect={(value) => {
+                  setDestination(value);
+                  setFocusedInput("");
+                }}
+              />
+            )}
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

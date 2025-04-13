@@ -1,23 +1,43 @@
-import { set } from 'mongoose';
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
+import { useNavigate } from 'react-router-dom';
+import { set } from 'mongoose';
 
 const UserLogin = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const [userData, setuserData] = useState({})
+  const {user, setUser} = useContext(UserDataContext);
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
-    console.log("submit");
-    setuserData({
+  const submitHandler = async (e) => {
+    const user= {
       email: email,
       password: password
-    })
-    console.log(userData);
+    }
     e.preventDefault();
-    setemail("");
-    setpassword("");
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/login`, user)
+    const data = response.data;
+    // if(response.status !== 201 && response.status !== 200){
+    //   alert("Invalid credentials");
+    //   return;
+    // }
+
+    // setUser(data);
+    // localStorage.setItem("token", data.token);
+    // navigate("/home");
+    // setemail("");
+    // setpassword("");
+    if(response.status===201 || response.status===200){
+      setUser(data);
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+      setemail("");
+      setpassword("");
+    }
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

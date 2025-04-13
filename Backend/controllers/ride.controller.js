@@ -39,7 +39,7 @@ const getDistanceTime = async (req, res) => {
 }
 
 const getSuggessions = async (req, res) => {
-    const { origin } = req.body;
+    const { origin } = req.query;
     if (!origin) {
         return res.status(400).json({ message: "Please provide origin" });
     }
@@ -56,9 +56,53 @@ const getSuggessions = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 }
+import fetch from 'node-fetch';
+
+const getCost = async (req, res) => {
+    const { origin, destination, vehicleType } = req.body;
+
+    if (!origin || !destination || !vehicleType) {
+        return res.status(400).json({ message: "Please provide origin, destination, and vehicleType" });
+    }
+
+    try {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin}&destinations=${destination}&key=${process.env.GOOGLE_MAPS_API_KEY}`);
+        const data = await response.json();
+
+        if (data.status !== "OK" || data.rows[0].elements[0].status !== "OK") {
+            return res.status(400).json({ message: "Unable to retrieve distance info" });
+        }
+
+        const distanceText = data.rows[0].elements[0].distance.text; // e.g., "10 km"
+        const durationText = data.rows[0].elements[0].duration.text; // e.g., "15 mins"
+
+        const distance = parseFloat(distanceText.replace(/[^0-9.]/g, ""));
+        const duration = parseFloat(durationText.replace(/[^0-9.]/g, ""));
+
+        let cost = 0;
+        switch (vehicleType) {
+            case 'uberGo':
+                cost = distance + duration * 0.5;
+                break;
+            case 'moto':
+                cost = distance + duration * 0.3;
+                break;
+            case 'auto':
+                cost = distance + duration * 0.4;
+                break;
+            default:
+                cost = distance + duration * 0.5;
+        }
+
+        return res.status(200).json({ cost });
+    } catch (error) {
+        return res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
 
 export {
     getCoordinates,
     getDistanceTime,
-    getSuggessions
+    getSuggessions,
+    getCost
 }

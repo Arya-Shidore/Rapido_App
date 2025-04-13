@@ -1,22 +1,44 @@
-import { set } from 'mongoose';
 import React from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import axios from 'axios';
+import { captainDataContext } from '../context/captainContext';
+import { useNavigate } from 'react-router-dom';
+import { set } from 'mongoose';
 
 const CaptainLogin = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [userData, setuserData] = useState({})
-
-  const submitHandler = (e) => {
+  // get context  
+  const {captain, setCaptain} = useContext(captainDataContext);
+  const navigate = useNavigate();
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setuserData({
+    const userData = {
       email: email,
-      password: password
-    })
-    console.log(userData);
-    setemail("");
-    setpassword("");
+      password: password,
+    }
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`, userData)
+    const data = response.data;
+    // if(response.status !== 201 || response.status !== 200){
+    //   alert("Invalid credentials");
+    //   return;
+    // }
+    // setUser(data);
+    // localStorage.setItem("captainToken", data.token);
+    // navigate("/home");
+    // setemail("");
+    // setpassword("");
+    console.log("response !1111!", response.status);
+    if(response.status===201 || response.status===200){
+      setCaptain(data);
+      localStorage.setItem("captainToken", data.token);
+      navigate("/captain-home");
+      setemail("");
+      setpassword("");
+    }
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

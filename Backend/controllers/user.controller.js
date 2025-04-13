@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
     await user.save();
     // generate token
     const token = user.generateAuthToken();
-    res.status(201).json({
+    return res.status(201).json({
         _id: user._id,
         fullname: user.fullname,
         email: user.email,
