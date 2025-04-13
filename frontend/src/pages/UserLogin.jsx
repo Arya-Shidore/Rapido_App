@@ -27,6 +27,7 @@ const UserLogin = () => {
     }
 
     setUser(data);
+    localStorage.setItem("token", data.token);
     navigate("/home");
     setemail("");
     setpassword("");

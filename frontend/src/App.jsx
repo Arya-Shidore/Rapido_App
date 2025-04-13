@@ -10,7 +10,8 @@ import Home from './pages/Home'
 
 import { UserDataContext } from './context/userContext'
 import BookRide from './pages/BookRide'
-
+import UserProtectRoute from './pages/UserProtectRoute'
+import UserLogout from './pages/UserLogout'
 const App = () => {
   const ans=useContext(UserDataContext)
   console.log("ans",ans);
@@ -22,7 +23,16 @@ const App = () => {
         <Route path="/signup" element={<UserSignup />} />
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={
+          <UserProtectRoute>
+            <Home />
+          </UserProtectRoute>
+        } />
+        <Route path="/logout" element={
+          <UserProtectRoute>
+            <UserLogout />
+          </UserProtectRoute>
+        } />
         <Route path="/book-ride" element={<BookRide />} />
       </Routes>
     </div>

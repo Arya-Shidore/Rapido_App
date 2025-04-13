@@ -26,13 +26,12 @@ const navigate = useNavigate();
     }
     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, userData)
     const data=response.data;
-    console.log("data   !!!!",response.status);
-    console.log("data   !!!!",data);
     if(response.status !== 201 || response.status !== 200){
       alert("Invalid credentials");
       return;
     }
     setUser(data);
+    localStorage.setItem("token", data.token);
     navigate("/home");
     
     setfirstname("");
