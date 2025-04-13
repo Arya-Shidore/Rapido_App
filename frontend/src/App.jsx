@@ -13,6 +13,8 @@ import { UserDataContext } from './context/userContext'
 import BookRide from './pages/BookRide'
 import UserProtectRoute from './pages/UserProtectRoute'
 import UserLogout from './pages/UserLogout'
+import CaptainStartNewRide from './pages/CaptainStartNewRide'
+
 const App = () => {
   const ans=useContext(UserDataContext)
   console.log("ans",ans);
@@ -42,6 +44,11 @@ const App = () => {
         <Route path="/captain-logout" element={
           <CaptainProtectRoute>
             <UserLogout />
+          </CaptainProtectRoute>
+        } />
+        <Route path="/captain-start-new-ride" element={
+          <CaptainProtectRoute>
+            <CaptainStartNewRide />
           </CaptainProtectRoute>
         } />
         <Route path="/book-ride" element={<BookRide />} />

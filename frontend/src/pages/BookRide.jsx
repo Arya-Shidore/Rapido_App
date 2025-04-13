@@ -10,12 +10,10 @@ const BookRide = () => {
   const [cost, setCost] = useState(null);
   const [vehicleType, setVehicleType] = useState('UberGo'); // Default vehicle type
   const [rideDetails, setRideDetails] = useState({
-    user: 'userId', // Replace with actual user ID
-    captain: 'captainId', // Replace with actual captain ID
+    // get userid of logged in user
+    user: localStorage.getItem('userId'), // Replace with actual user ID
     pickup: origin,
     destination: destination,
-    fare: 0,
-    otp: '123456', // Generate OTP for validation (or replace with actual OTP generation logic)
   });
 
   useEffect(() => {
@@ -50,23 +48,36 @@ const BookRide = () => {
   };
 
   const handleBookRide = async () => {
+    const rideData = {
+      user: rideDetails.user,
+      pickup: rideDetails.pickup,
+      destination: rideDetails.destination,
+      vehicleType: vehicleType,
+    };
+    console.log("Ride Data before booking:", rideData);
+  
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/bookRide/book-ride`,
-        rideDetails, 
+        rideData,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Add token here as well
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         }
       );
-      console.log('Ride booked successfully:', response.data);
-      // Redirect to confirmation page or show a success message
-      navigate('/ride-confirmation', { state: { rideId: response.data.ride._id } }); // Use navigate instead of history.push
+      console.log("Ride created successfully:", response.data);
+      // Handle success (e.g., navigate to ride details page)
     } catch (error) {
-      console.error('Error booking ride:', error);
+      console.error("Error creating ride:", error);
+      // Handle error (e.g., show error message)
     }
+  
+    console.log('Ride Data:', rideData);
+    return rideData;
   };
+  
+
 
   return (
     <div

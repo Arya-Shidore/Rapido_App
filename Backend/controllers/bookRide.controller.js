@@ -30,7 +30,7 @@ export const bookRide = async (req, res) => {
             fare,
             otp,
             duration: durationInSeconds,
-            distanc: distanceInMeters,
+            distance: distanceInMeters,
         };
 
         const newRide = await Ride.create(rideData);
