@@ -13,7 +13,11 @@ const Home = () => {
     e.preventDefault();
     console.log("origin", origin);
     console.log("destination", destination);
-    navigate("/book-ride");
+    navigate("/book-ride", {
+      state: { origin, destination }
+    });
+    
+    
   };
 
   return (
