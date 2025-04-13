@@ -84,7 +84,7 @@ const getCost = async (req, res) => {
             case 'uberGo':
                 cost = distance + duration * 0.5;
                 break;
-            case 'motorBike':
+            case 'moto':
                 cost = distance + duration * 0.3;
                 break;
             case 'auto':

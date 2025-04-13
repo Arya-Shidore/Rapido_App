@@ -10,8 +10,8 @@ export const bookRide = async (req, res) => {
     console.log("pickup", pickup);
     // router.get("/get-distanceTime", getDistanceTime); to get distance and time
     const { duration, distance } = await getDistanceTime(pickup, destination);
-
-    const userId = req.user._id;
+    const userId = req.user._id; // Assuming you have the user ID from the token
+    
     const distanceInMeters = Number(distance.split(" ")[0]) * 1000;
     const durationInSeconds = Number(duration.split(" ")[0]) * 60;
     const fare = Math.floor(distanceInMeters/1000 * 9); // Example fare calculation
